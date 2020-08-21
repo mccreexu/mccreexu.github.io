@@ -298,30 +298,42 @@
 
 
 
-  
-  
-  
 
   
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <section id="comments" class="comments">
+    <style>
+      .comments{margin:30px;padding:10px;background:#fff}
+      @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
+    </style>
+    <div id="vcomment" class="comment"></div> 
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
 <script>
-var gitment = new Gitment({
-  id: "http://yoursite.com/2020/08/13/hello-world/",
-  owner: 'mccreexu',
-  repo: 'comments',
-  oauth: {
-    client_id: 'f1a35030fbf124f289be',
-    client_secret: 'eb6b8182461f80d5ceff2748bbd6e6538d7f5933',
-  },
-})
-gitment.render('gitment-ctn')
+   var notify = 'false' == true ? true : false;
+   var verify = 'false' == true ? true : false;
+    window.onload = function() {
+        new Valine({
+            el: '.comment',
+            notify: notify,
+            verify: verify,
+            app_id: "tDkw4MkYwpu9XvV2mg5RgC8E-gzGzoHsz",
+            app_key: "yhbINk6NPn5fhDjv36iOIh3d",
+            placeholder: "Just go go",
+            avatar:"retro"
+        });
+    }
 </script>
+  </section>
+  
+
+  
+  
+  
+
+  
+
+  
+
   
 
 
@@ -413,6 +425,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">入门</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">idea</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
