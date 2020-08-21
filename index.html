@@ -149,19 +149,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-idea快捷键设置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-IDEA设置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/21/idea%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE/">idea快捷键设置</a>
+      <a class="article-title" href="/2020/08/21/IDEA%E8%AE%BE%E7%BD%AE/">IDEA设置</a>
     </h1>
   
 
         
-        <a href="/2020/08/21/idea%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE/" class="archive-article-date">
+        <a href="/2020/08/21/IDEA%E8%AE%BE%E7%BD%AE/" class="archive-article-date">
   	<time datetime="2020-08-20T17:40:30.184Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-21</time>
 </a>
         
@@ -169,15 +169,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="idea整合eclipse快捷键設置"><a href="#idea整合eclipse快捷键設置" class="headerlink" title="idea整合eclipse快捷键設置"></a>idea整合eclipse快捷键設置</h1><ul>
-<li><p>目的：从eclipse转到idea后为了快速上手、统一快捷键设置，所以把idea快捷键设置成跟eclipse一模一样。</p>
+        <h1 id="IDEA整合eclipse快捷键設置"><a href="#IDEA整合eclipse快捷键設置" class="headerlink" title="IDEA整合eclipse快捷键設置"></a>IDEA整合eclipse快捷键設置</h1><ul>
+<li><p>目的：从eclipse转到IDEA后为了快速上手、统一快捷键设置，所以把idea快捷键设置成跟eclipse一模一样。</p>
 </li>
 <li><p>导入keymap-shkstart.jar。提取码：bhmg</p>
 </li>
 </ul>
 <p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1rToUzM8_sz6dg5WGGUGbtw">点击此链接下载keymap-shkstart.jar</a></p>
 <ul>
-<li>导入方法：依次找到file==》import settings，然后选中硬盘中的jar包即可，如图</li>
+<li>导入方法：依次找到File==》Import Settings，然后选中硬盘中的jar包即可，如图</li>
 </ul>
 <p><img src="https://gitee.com/mccreexu/picgo/raw/master/settings.png"></p>
 <h3 id="常用快捷键总结"><a href="#常用快捷键总结" class="headerlink" title="常用快捷键总结"></a>常用快捷键总结</h3><ol>
@@ -227,6 +227,94 @@
 <li>ctrl + shift +V：选择要粘贴的内容</li>
 <li>ctrl + shift + H：查找方法在哪里被调用</li>
 </ol>
+<p><br/><br/></p>
+<hr>
+<p><em>以下为2020/8/22新增内容</em></p>
+<h1 id="IDEA中的模板"><a href="#IDEA中的模板" class="headerlink" title="IDEA中的模板"></a>IDEA中的模板</h1><p><strong>在IDEA中有两个地方可以设置模板</strong></p>
+<ol>
+<li>Editor –&gt; Live Templates；可自定义每一个模板，例如增加/删除/修改</li>
+<li>Editor–&gt; General –&gt; Postfix Completion；不可自定义，只能选择用或不用</li>
+<li><em>如何选择</em>：两种都可以用，不必刻意地厚此薄彼</li>
+</ol>
+<p><font size=4 color="orange">用前说明：</font></p>
+<ul>
+<li><p>Postfix Completion 处的模板调用方式为 “xxx.模板名” （xxx为一个变量，可以是基本类型变量，也可以是一个类/数组/List/Map等等类型的实例）；</p>
+</li>
+<li><p>Live Templates 处的模板调用方式只需要打出 模板名  就可以调用。</p>
+</li>
+</ul>
+<h3 id="常用模板："><a href="#常用模板：" class="headerlink" title="常用模板："></a>常用模板：</h3><ul>
+<li><p>一、 <strong>psvm</strong>：生成main方法</p>
+</li>
+<li><p>二、 <strong>sout</strong>：生成<code>System.out.pringtln();</code></p>
+<ul>
+<li><p>变形1、<strong>soutp</strong>：打印方法的参数<code>System.out.println(&quot;string = [&quot; + string + &quot;], integer = [&quot; + integer + &quot;]&quot;);</code></p>
+</li>
+<li><p>变形2、<strong>soutm</strong>：打印方法名<code>·System.out.println(&quot;HelloWorldMainApplication.test&quot;);</code></p>
+</li>
+<li><p>变形3、<strong>soutv</strong>：打印距离最近的一个变量的值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;i = &quot;</span> + i);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变形4、<strong>xxx.sout</strong>：xxx为变量名，打印指定的变量的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">System.out.println(s);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>三、 <strong>fori</strong>：生成一个for循环来遍历一个数组</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strings.length(); i++) &#123;</span><br><span class="line">    System.out.println(strings[i]);<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>变形1、<strong>iter</strong>：生成一个增强的for循环</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (String s : strings) &#123;</span><br><span class="line">    System.out.println(s);<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变形2、<strong>itar</strong>：在增强的for循环基础上增加了一个赋值操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String[] strings = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;world&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strings.length; i++) &#123;</span><br><span class="line">    String s = strings[i];</span><br><span class="line">    System.out.pringln(s);<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>四、 <strong>xxx.for</strong>：xxx可以是数组或List；生成一个增强的for循环来遍历一个指定的数组/List</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;world&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (String s : list) &#123;</span><br><span class="line">    System.out.pringln(s);<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>变形1、<strong>xxx.fori</strong>：生成一个普通的for循环</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;world&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">    System.out.println(list.get(i));<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变形2、<strong>xxx.forr</strong>：生成一个倒序遍历的for循环</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;world&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = list.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    System.out.println(list.get(i));<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>五、 <strong>ifn</strong>：生成一个if判断语句，判断一个数组/List/Map是否为空</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;world&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;这是一个空的集合&quot;</span>);<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>变形1、<strong>inn</strong>：生成一个if判断语句，判断一个数组/List/Map是否非空</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;world&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">    System.out.println(list.size());<span class="comment">//该行打印语句非IDEA自动生成，本人手动添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变形2、<strong>xxx.nn</strong>：生成一个if判断语句，判断指定的数组/List/Map是否非空</p>
+</li>
+<li><p>变形3、<strong>xxx.null</strong>：生成一个if判断语句，判断指定的数组/List/Map是否为空</p>
+</li>
+</ul>
+</li>
+<li><p>六、 <strong>prsf</strong>：生成  private static final  修饰符；例：<code>private static final boolean FLAG = true;</code></p>
+<ul>
+<li>变形1、<strong>psf</strong>：生成  public static final  修饰符；例：<code>public static final long INDEX_1 = 0;</code></li>
+<li>变形2、<strong>psfi</strong>：生成  public static final int ；例：<code>public static final int INDEX_2 = 0;</code></li>
+<li>变形3、<strong>psfs</strong>：生成  public static final String ；例：<code>public static final String URL = &quot;localhost:8080&quot;;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="自定义模板"><a href="#自定义模板" class="headerlink" title="自定义模板"></a>自定义模板</h3><p>在Live Templates中自定义模板：</p>
+<ul>
+<li><strong>修改</strong>：选中一个已有的模板，other、output、plain中都是常用的模板，以 <strong>psfi</strong> 为例进行修改，在 Template text 框中新增 “$VAR1$ = $VAR2$;$END$” 这几个代码。</li>
+<li>修改前：调用模板后只有 public static final int 这几个字<img src="https://gitee.com/mccreexu/picgo/raw/master/BeforeUpdate.PNG"><br> <br/><br/></li>
+<li>修改后：调用模板后光标停在等于号左边，输完变量名按回车光标跳到等于号右边，输完变量值后按回车光标跳到下一行开始处<img src="https://gitee.com/mccreexu/picgo/raw/master/AfterUpdate.PNG"><br> <br/><br/></li>
+<li><strong>新增</strong>：点击右边加号新增一个自定义的模板，<ul>
+<li>再点击最下面一行的Define，规定该模板的使用范围，通常选择Java即可<img src="https://gitee.com/mccreexu/picgo/raw/master/define.png"><br><br/><br/></li>
+<li>在 <em>Abbreviation</em> 处填入模板名，<em>Description</em> 处描述该模板的作用，<em>Template text</em> 处定义模板的语法，即调用后应该生成什么样的代码以及光标所处位置，完成后保存退出即可使用该模板<img src="https://gitee.com/mccreexu/picgo/raw/master/create.PNG"></li>
+</ul>
+</li>
+</ul>
 
       
 
@@ -240,11 +328,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		
 		</ul>
@@ -254,7 +342,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/21/idea%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/08/21/IDEA%E8%AE%BE%E7%BD%AE/">展开全文 >></a>
         </p>
       
 
@@ -326,11 +414,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
         		</li>
       		
 		</ul>
@@ -731,7 +819,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
+                <a href="javascript:void(0)" class="js-tag color5">idea</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -739,7 +827,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">idea</a>
+                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
               </li>
             
             <div class="clearfix"></div>
