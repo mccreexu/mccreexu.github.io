@@ -153,6 +153,170 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-MySQL使用指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/26/MySQL%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">MySQL使用指南</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/26/MySQL%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2020-08-25T17:51:59.267Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MySQL使用指南"><a href="#MySQL使用指南" class="headerlink" title="MySQL使用指南"></a>MySQL使用指南</h1><p><em>虽然标题是使用指南，但目前只更新了一些基础用法，后续有时间会把进阶技巧补上的</em></p>
+<p><font color="red">提前注释</font>：关键字均已<strong>大写且加粗</strong>；<em>斜体字</em>表示某个具体的数据库名、表名、列名、字段名、变量名等等需要视具体情况更换的内容。</p>
+<h3 id="命令行登录与退出"><a href="#命令行登录与退出" class="headerlink" title="命令行登录与退出"></a>命令行登录与退出</h3><p>登录命令：<strong>mysql -h主机名 -P端口号 -u用户名 -p密码</strong></p>
+<p>例：mysql -h localhost -P 3306 -u root -padmin</p>
+<p>注意：端口号的P是大写，密码的p是小写，且要在p后面紧跟密码，中间不能有空格</p>
+<p>退出命令：<strong>exit</strong></p>
+<h3 id="常用的关键字"><a href="#常用的关键字" class="headerlink" title="常用的关键字"></a>常用的关键字</h3><ul>
+<li><strong>USE</strong>: USE “<em>Database Name</em>“;</li>
+<li><strong>SHOW</strong>: SHOW <strong>DATABASES</strong>;显示所有数据库<ul>
+<li>SHOW <strong>TABLES</strong>;显示使用中的数据库中所有的表</li>
+<li>SHOW <strong>COLUMNS</strong> FROM “<em>Table Name</em>“;显示表中所有的列/字段</li>
+</ul>
+</li>
+<li><strong>SELECT</strong>: SELECT “<em>column name</em>“ <strong>FROM</strong> “<em>table name</em>“;<ul>
+<li>SELECT * FROM “<em>table name</em>“; 提醒：select *最好少写，能不写就不写；因为在开发环境下很多时候并不需要查询表中所有字段，如果用select *会影响性能。</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ <strong>LIMIT</strong> “<em>index</em>“,”<em>length</em>“;(从第index行开始，共显示length行；索引从0开始)</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ <strong>ORDER BY</strong> “<em>column name</em>“;对结果排序，默认升序</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“,”<em>column2 name</em>“;</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column name</em>“ <strong>DESC</strong>;对结果降序排序</li>
+<li>SELECT <strong>DISTINCT</strong> “<em>column name</em>“ FROM “<em>table name</em>“; 对结果去重</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column name</em>“ LIMIT 1; (查询一列的最大值，与max()函数异曲同工)</li>
+</ul>
+</li>
+<li><strong>WHERE</strong>: SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE + 判断条件;<ul>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>BETWEEN</strong> “<em>min</em>“ <strong>AND</strong> “<em>max</em>“;查询一列的结果在min到max之间的值（闭区间）</li>
+<li>SELECT “<em>column1 name</em>“,”<em>column2 name</em>“ FROM “<em>table name</em>“ WHERE + 判断条件1 <strong>AND</strong> + 判断条件2; AND也可做为逻辑与；追加在WHERE后继续对结果进一步筛选</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>NOT IN</strong> (value1,value2…); NOT 为逻辑非；IN(值1，值2…)在这里的IN相当于逻辑或；</li>
+<li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>LIKE</strong> ‘_value%’;(‘_‘ 意为匹配任意一个字符; ‘%’ 意为匹配任意多个字符，任意次)</li>
+</ul>
+</li>
+<li><strong>AS</strong>: SELECT “<em>column1 name</em>“,”<em>column2 name</em>“,”<em>column1 name</em>“*“<em>column2 name</em>“ AS “<em>alias</em>“ FROM “<em>table name</em>“ WHERE + 判断条件； 作用：为查询的字段起别名</li>
+</ul>
+<h3 id="常用的文本处理函数"><a href="#常用的文本处理函数" class="headerlink" title="常用的文本处理函数"></a>常用的文本处理函数</h3><ul>
+<li><strong>CONCAT(str1,str2,str3…)</strong>:SELECT CONCAT(TRIM(“<em>column1 name</em>“),TRIM(“<em>column2 name</em>“)) AS “<em>alias</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“; 作用：拼接字段</li>
+<li><strong>LEFT(str,length)</strong>:作用：从左边第一个字符起截取指定长度的字符。例：SELECT LEFT(‘Java program’,4); 结果：Java</li>
+<li><strong>RIGHT(str,length)</strong>:作用：从右边第一个字符起截取指定长度的字符。例：SELECT RIGHT(‘Java program’,7); 结果：program</li>
+<li><strong>LENGTH(str)</strong>:作用：返回字符串的长度。例：SELECT LENGTH(‘Java program’); 结果：12 </li>
+<li><strong>LOCATE(substr,str)</strong>:作用：substr第一次出现在str中的位置（索引从1开始）。例：SELECT LOCATE(‘a’,’Java program’); 结果：2;<ul>
+<li><strong>LOCATE(substr,str,index)</strong>:作用：substr第一次出现在str中的位置，从第index个字符开始算起。例：SELECT LOCATE(‘a’,’Java program’,5); 结果：11</li>
+</ul>
+</li>
+<li><strong>LOWER(str)</strong>:SELECT LOWER(‘JAVA PROGRAM’); 结果：java program</li>
+<li><strong>UPPER(str)</strong>:SELECT UPPER(‘Java program’); 结果：JAVA PROGRAM</li>
+<li><strong>TRIM(BOTH/LEADING/TRAILING substr FROM str)</strong>:作用：去除str中的substr，并把去除后的字符串返回。<ul>
+<li>三个修饰符的作用：<ul>
+<li><strong>LEADING</strong>：从左边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(LEADING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：javamuumuu</li>
+<li><strong>TRAILING</strong>：从右边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(TRAILING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：muumuujava</li>
+<li><strong>BOTH</strong>：去除str两侧的substr；例：SELECT TRIM(BOTH ‘muu’ FROM ‘muujavamuujavamuu’); 结果：javamuujava</li>
+<li>三个修饰符以及substr都可省略，如果都省略则默认去除两侧的空格；例：SELECT TRIM(‘  java  ‘); 结果：java（前后都不带空格）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>SUBSTRING(str,index,length)</strong>: 作用：从str的左边起第index个字符开始，截取length个字符。例：SELECT SUBSTRING(‘Java program’,1,4); 结果：Java<ul>
+<li>SELECT SUBSTRING(‘Java program’,1); 省略长度则默认截取后面的全部；结果：Java program</li>
+<li>SELECT SUBSTRING(‘Java program’,2); 结果：ava Program</li>
+<li>SELECT SUBSTRING(‘Java program’,-3);  index如果是负数，则意为从str的右边的第index个字符起，截取length个字符。结果：ram</li>
+<li>SELECT SUBSTRING(‘Java program’,-3,2); 结果：ra</li>
+</ul>
+</li>
+</ul>
+<h3 id="常用的日期函数"><a href="#常用的日期函数" class="headerlink" title="常用的日期函数"></a>常用的日期函数</h3><ul>
+<li><strong>CURDATE()</strong>: 显示当前日期；格式：YYYY-MM-DD；SELECT CURDATE(); </li>
+<li><strong>CURTIME()</strong>: 显示当前时间；格式：HH:MM:SS；SELECT CURTIME(); </li>
+<li><strong>DATE()</strong>: 返回日期时间的日期部分；例：SELECT TIME(‘2000-02-22 11:22:33’)；结果：2000-02-22</li>
+<li><strong>TIME()</strong>: 返回日期时间的时间部分；例：SELECT TIME(‘2000-02-22 11:22:33’)；结果：11:22:33</li>
+<li><strong>DATEDIFF(date1,date2)</strong>: 返回两个日期之差（date1-date2）；例：SELECT DATEDIFF(‘2000-02-01’,’2000-02-22’); 结果：-21</li>
+<li><strong>DATE_FORMAT(date,format)</strong>: 返回格式化后的日期时间；例：SELECT DATE_FORMAT(‘2000/02/22 3:33:22’,’%m-%d-%Y/%h %i %s’); 结果：02-22-2000/03 33 22</li>
+<li><strong>DAYOFWEEK()</strong>: 返回日期在一周中的第几天（星期日算第一天）；例：SELECT DAYOFWEEK(‘2020-08-25’); 结果：3</li>
+<li><strong>YEAR()</strong>: 返回一个日期的年份部分</li>
+<li><strong>MONTH()</strong>: 返回一个日期的月份部分</li>
+<li><strong>DAY()</strong>: 返回一个日期的天数部分</li>
+<li><strong>HOUR()</strong>: 返回一个日期时间的小时部分</li>
+<li><strong>MINUTE()</strong>: 返回一个日期时间的分钟部分</li>
+<li><strong>SECOND()</strong>: 返回一个日期时间的秒钟部分</li>
+</ul>
+<h3 id="常用的数值处理函数"><a href="#常用的数值处理函数" class="headerlink" title="常用的数值处理函数"></a>常用的数值处理函数</h3><ul>
+<li><strong>ABS()</strong>: 返回一个数的绝对值；</li>
+<li><strong>MOD(num1,num2)</strong>: 返回num1除以num2的余数；例：SELECT MOD(11,5); 结果：1</li>
+<li><strong>PI()</strong>: 返回圆周率</li>
+<li><strong>RAND()</strong>: 返回一个随机数</li>
+<li><strong>SQRT()</strong>: 返回一个数的平方根</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/26/MySQL%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-IDEA设置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -184,7 +348,8 @@
 <li>导入方法：依次找到File==》Import Settings，然后选中硬盘中的jar包即可，如图</li>
 </ul>
 <p><img src="https://gitee.com/mccreexu/picgo/raw/master/settings.png"></p>
-<h3 id="常用快捷键总结"><a href="#常用快捷键总结" class="headerlink" title="常用快捷键总结"></a>常用快捷键总结</h3><ol>
+<h3 id="常用快捷键总结"><a href="#常用快捷键总结" class="headerlink" title="常用快捷键总结"></a>常用快捷键总结</h3><p><strong>写在前面的忠告：工作机上与开发无关的软件一定要检查它的热键是否跟开发工具中的快捷键冲突，否则有的软件的快捷键优先级比开发工具的高，开发工具中的快捷键就无法使用。比如某易云音乐的音量增减快捷键跟eclipse中的向上或向下复制一行的快捷键冲突</strong></p>
+<ol>
 <li>alt + r：执行(run)</li>
 <li>alt + /：提示补全</li>
 <li>ctrl + /：单行注释</li>
@@ -230,6 +395,8 @@
 <li>ctrl + shift + Q：快速搜索类中的错误</li>
 <li>ctrl + shift +V：选择要粘贴的内容</li>
 <li>ctrl + shift + H：查找方法在哪里被调用</li>
+<li>ctrl + alt + down：把光标所在行（或选中的多行）快速复制到下一行</li>
+<li>ctrl + alt + up：把光标所在行（或选中的多行）快速复制到上一行</li>
 </ol>
 <p><br/><br/></p>
 <hr>
@@ -832,6 +999,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
             
             <div class="clearfix"></div>
