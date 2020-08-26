@@ -206,17 +206,25 @@
 <li><strong>AS</strong>: SELECT “<em>column1 name</em>“,”<em>column2 name</em>“,”<em>column1 name</em>“*“<em>column2 name</em>“ AS “<em>alias</em>“ FROM “<em>table name</em>“ WHERE + 判断条件； 作用：为查询的字段起别名</li>
 </ul>
 <h3 id="常用的文本处理函数"><a href="#常用的文本处理函数" class="headerlink" title="常用的文本处理函数"></a>常用的文本处理函数</h3><ul>
-<li><strong>CONCAT(str1,str2,str3…)</strong>:SELECT CONCAT(TRIM(“<em>column1 name</em>“),TRIM(“<em>column2 name</em>“)) AS “<em>alias</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“; 作用：拼接字段</li>
-<li><strong>LEFT(str,length)</strong>:作用：从左边第一个字符起截取指定长度的字符。例：SELECT LEFT(‘Java program’,4); 结果：Java</li>
-<li><strong>RIGHT(str,length)</strong>:作用：从右边第一个字符起截取指定长度的字符。例：SELECT RIGHT(‘Java program’,7); 结果：program</li>
-<li><strong>LENGTH(str)</strong>:作用：返回字符串的长度。例：SELECT LENGTH(‘Java program’); 结果：12 </li>
-<li><strong>LOCATE(substr,str)</strong>:作用：substr第一次出现在str中的位置（索引从1开始）。例：SELECT LOCATE(‘a’,’Java program’); 结果：2;<ul>
+<li><p><strong>CONCAT(str1,str2,str3…)</strong>:SELECT CONCAT(TRIM(“<em>column1 name</em>“),TRIM(“<em>column2 name</em>“)) AS “<em>alias</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“; 作用：拼接字段</p>
+</li>
+<li><p><strong>LEFT(str,length)</strong>:作用：从左边第一个字符起截取指定长度的字符。例：SELECT LEFT(‘Java program’,4); 结果：Java</p>
+</li>
+<li><p><strong>RIGHT(str,length)</strong>:作用：从右边第一个字符起截取指定长度的字符。例：SELECT RIGHT(‘Java program’,7); 结果：program</p>
+</li>
+<li><p><strong>LENGTH(str)</strong>:作用：返回字符串的长度。例：SELECT LENGTH(‘Java program’); 结果：12 </p>
+</li>
+<li><p><strong>LOCATE(substr,str)</strong>:作用：substr第一次出现在str中的位置（索引从1开始）。例：SELECT LOCATE(‘a’,’Java program’); 结果：2;</p>
+<ul>
 <li><strong>LOCATE(substr,str,index)</strong>:作用：substr第一次出现在str中的位置，从第index个字符开始算起。例：SELECT LOCATE(‘a’,’Java program’,5); 结果：11</li>
 </ul>
 </li>
-<li><strong>LOWER(str)</strong>:SELECT LOWER(‘JAVA PROGRAM’); 结果：java program</li>
-<li><strong>UPPER(str)</strong>:SELECT UPPER(‘Java program’); 结果：JAVA PROGRAM</li>
-<li><strong>TRIM(BOTH/LEADING/TRAILING substr FROM str)</strong>:作用：去除str中的substr，并把去除后的字符串返回。<ul>
+<li><p><strong>LOWER(str)</strong>:SELECT LOWER(‘JAVA PROGRAM’); 结果：java program</p>
+</li>
+<li><p><strong>UPPER(str)</strong>:SELECT UPPER(‘Java program’); 结果：JAVA PROGRAM</p>
+</li>
+<li><p><strong>TRIM(BOTH/LEADING/TRAILING substr FROM str)</strong>:作用：去除str中的substr，并把去除后的字符串返回。</p>
+<ul>
 <li>三个修饰符的作用：<ul>
 <li><strong>LEADING</strong>：从左边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(LEADING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：javamuumuu</li>
 <li><strong>TRAILING</strong>：从右边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(TRAILING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：muumuujava</li>
@@ -226,18 +234,102 @@
 </li>
 </ul>
 </li>
-<li><strong>SUBSTRING(str,index,length)</strong>: 作用：从str的左边起第index个字符开始，截取length个字符。例：SELECT SUBSTRING(‘Java program’,1,4); 结果：Java<ul>
+<li><p><strong>SUBSTRING(str,index,length)</strong>: 作用：从str的左边起第index个字符开始，截取length个字符。例：SELECT SUBSTRING(‘Java program’,1,4); 结果：Java</p>
+<ul>
 <li>SELECT SUBSTRING(‘Java program’,1); 省略长度则默认截取后面的全部；结果：Java program</li>
 <li>SELECT SUBSTRING(‘Java program’,2); 结果：ava Program</li>
 <li>SELECT SUBSTRING(‘Java program’,-3);  index如果是负数，则意为从str的右边的第index个字符起，截取length个字符。结果：ram</li>
 <li>SELECT SUBSTRING(‘Java program’,-3,2); 结果：ra</li>
 </ul>
 </li>
+<li><p><strong>GROUP BY</strong>: 对GRPOP BY进行分组，然后再在各个组内做相同的操作；例：SELECT vendor_id,COUNT(*) FROM products GROUP BY vendor_id; 结果：对vendor_id进行分组，然后计算每个厂商的产品数；结果显示两列，一列是vendor_id,一列COUNT(*),即对应的产品数</p>
+<ul>
+<li><p>GROUP BY的使用规则：</p>
+<ul>
+<li>GROUP BY 子句可以包含多列，如果包含多列则按最后一列进行分组</li>
+<li>GROUP BY 子句中出现的列必须是SELECT子句中查询的列或有效的表达式(但不能是聚集函数如sum、max等)，如果SELECT语句中有表达式，GROUP BY子句中也要指定相同的表达式，不可使用别名</li>
+<li>除了聚集函数外，每一个出现在SELECT语句中的列都必须在GROUP BY中也给出</li>
+<li>分组列中若有NULL值，则将其作为一个分组返回</li>
+<li>GROUP BY子句必须出现在WHERE子句之后，ORDER BY子句之前</li>
 </ul>
+</li>
+<li><p>过滤分组：如果想对分组后的数据进行筛选，只能使用<strong>HAVING</strong>关键字，不可以用WHERE，尽管它们的语法相同。例：SELECT vendor_id,COUNT(*) FROM products GROUP BY vendor_id <strong>HAVING</strong> COUNT(*)&gt;=2; 结果显示两列，一列是vendor_id,一列是产品数不小于2的COUNT(*)；</p>
+</li>
+<li><p>为什么只能用HAVING不能用WHERE对排序后的数据进行筛选？因为WHERE过滤指定的是行，而HAVING过滤分组，所以WHERE只能在分组前筛选。例：分组前对产品价格筛选，只查询价格大于10的产品数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT vendor_id,COUNT(*)</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &gt;&#x3D;10</span><br><span class="line">GROUP BY vendor_id</span><br><span class="line">HAVING COUNT(*) &gt;&#x3D; 2;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>分组后排序：分组后的数据依然可以用ORDER BY排序。例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT vendor_id,COUNT(*) AS prod_nums</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vendor_id</span><br><span class="line">HAVING COUNT(*)&gt;&#x3D;2</span><br><span class="line">ORDER BY prod_nums;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p><font size=5 color="orange">关键字书写顺序小结：</font></p>
+<p>直接看例子（无实意，仅供展示各个关键字的书写顺序）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT order_num, SUM(quantity*item_price) AS ordertotal</span><br><span class="line">FROM order_items</span><br><span class="line">WHERE YEAR(order_date)&#x3D;2019</span><br><span class="line">GROUP BY order_num</span><br><span class="line">HAVING SUM(quantity*item_price) &gt;&#x3D; 50</span><br><span class="line">ORDER BY ordertotal</span><br><span class="line">LIMIT 1,5;</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SELECT</td>
+<td>查询</td>
+<td>是</td>
+</tr>
+<tr>
+<td>AS</td>
+<td>起别名</td>
+<td>仅当对查询时用来处理数据的函数起别名时必须</td>
+</tr>
+<tr>
+<td>FROM</td>
+<td>从表中检索数据</td>
+<td>仅当从表中查询数据时必须</td>
+</tr>
+<tr>
+<td>WHERE</td>
+<td>行级过滤</td>
+<td>仅当使用判断条件时必须</td>
+</tr>
+<tr>
+<td>GROUP BY</td>
+<td>分组</td>
+<td>仅当分组计算聚集时必须</td>
+</tr>
+<tr>
+<td>HAVING</td>
+<td>组级过滤</td>
+<td>仅当需要分组后筛选时必须</td>
+</tr>
+<tr>
+<td>ORDER BY</td>
+<td>对结果排序</td>
+<td>仅当需要排序时必须</td>
+</tr>
+<tr>
+<td>LIMIT</td>
+<td>限制检索的行数</td>
+<td>仅当需要限制检索的行数时必须</td>
+</tr>
+</tbody></table>
 <h3 id="常用的日期函数"><a href="#常用的日期函数" class="headerlink" title="常用的日期函数"></a>常用的日期函数</h3><ul>
 <li><strong>CURDATE()</strong>: 显示当前日期；格式：YYYY-MM-DD；SELECT CURDATE(); </li>
 <li><strong>CURTIME()</strong>: 显示当前时间；格式：HH:MM:SS；SELECT CURTIME(); </li>
-<li><strong>DATE()</strong>: 返回日期时间的日期部分；例：SELECT TIME(‘2000-02-22 11:22:33’)；结果：2000-02-22</li>
+<li><strong>DATE()</strong>: 返回日期时间的日期部分；例：SELECT DATE(‘2000-02-22 11:22:33’)；结果：2000-02-22</li>
 <li><strong>TIME()</strong>: 返回日期时间的时间部分；例：SELECT TIME(‘2000-02-22 11:22:33’)；结果：11:22:33</li>
 <li><strong>DATEDIFF(date1,date2)</strong>: 返回两个日期之差（date1-date2）；例：SELECT DATEDIFF(‘2000-02-01’,’2000-02-22’); 结果：-21</li>
 <li><strong>DATE_FORMAT(date,format)</strong>: 返回格式化后的日期时间；例：SELECT DATE_FORMAT(‘2000/02/22 3:33:22’,’%m-%d-%Y/%h %i %s’); 结果：02-22-2000/03 33 22</li>
@@ -256,6 +348,30 @@
 <li><strong>RAND()</strong>: 返回一个随机数</li>
 <li><strong>SQRT()</strong>: 返回一个数的平方根</li>
 </ul>
+<h3 id="常用的聚集函数"><a href="#常用的聚集函数" class="headerlink" title="常用的聚集函数"></a>常用的聚集函数</h3><ul>
+<li><strong>AVG</strong>(<em>column</em>): 返回一个数值列的平均值，自动忽略null值；<ul>
+<li><strong>AVG</strong>(<strong>DISTINCT</strong> <em>column</em>): 去重之后求一列的平均值</li>
+</ul>
+</li>
+<li><strong>COUNT()</strong>: 返回表中的总行数，通常用COUNT(*)来计算；<ul>
+<li><strong>COUNT</strong>(<strong>DISTINCT</strong> <em>column</em>): 去重后计算一列的总行数</li>
+</ul>
+</li>
+<li><strong>MAX</strong>(<em>column</em>): 返回一个数值列的最大值；在语法上也可以用DISTINCT去重，但没有实际意义</li>
+<li><strong>MIN</strong>(<em>column</em>): 返回一个数值列的最小值；在语法上也可以用DISTINCT去重，但没有实际意义</li>
+<li><strong>SUM</strong>(<em>column</em>): 返回一个数值列的和<ul>
+<li><strong>SUM</strong>(<strong>DISTINCT</strong> <em>column</em>): 去重后对一列求和</li>
+</ul>
+</li>
+</ul>
+<h3 id="子查询（如果可以用联表查询最好不用子查询）"><a href="#子查询（如果可以用联表查询最好不用子查询）" class="headerlink" title="子查询（如果可以用联表查询最好不用子查询）"></a>子查询（如果可以用联表查询最好不用子查询）</h3><p>直接看例子：套娃查询，最内层的查询语句返回的结果给上一层当作判断条件。（子查询一般不宜嵌套过多，否则极易影响性能）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name,cust_contact</span><br><span class="line">FROM customers</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT order_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id &#x3D; &#39;TNT&#39;));</span><br></pre></td></tr></table></figure>
+
+
+
+<p>例2：作为计算字段使用子查询: 查询出来的数值可以被上一层继续查询并返回。（涉及外部查询的子查询称为<strong>相关子查询</strong>，列名可能重复的情况下必须这样写，表名和列名之间加个句点）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name,</span><br><span class="line">       cust_state,</span><br><span class="line">       (SELECT COUNT(*)</span><br><span class="line">        FROM orders</span><br><span class="line">        WHERE orders.cust_id &#x3D; customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
+
 
       
 
