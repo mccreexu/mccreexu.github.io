@@ -180,13 +180,16 @@
 <p>注意：端口号的P是大写，密码的p是小写，且要在p后面紧跟密码，中间不能有空格</p>
 <p>退出命令：<strong>exit</strong></p>
 <h3 id="常用的关键字"><a href="#常用的关键字" class="headerlink" title="常用的关键字"></a>常用的关键字</h3><ul>
-<li><strong>USE</strong>: USE “<em>Database Name</em>“;</li>
-<li><strong>SHOW</strong>: SHOW <strong>DATABASES</strong>;显示所有数据库<ul>
+<li><p><strong>USE</strong>: USE “<em>Database Name</em>“;</p>
+</li>
+<li><p><strong>SHOW</strong>: SHOW <strong>DATABASES</strong>;显示所有数据库</p>
+<ul>
 <li>SHOW <strong>TABLES</strong>;显示使用中的数据库中所有的表</li>
 <li>SHOW <strong>COLUMNS</strong> FROM “<em>Table Name</em>“;显示表中所有的列/字段</li>
 </ul>
 </li>
-<li><strong>SELECT</strong>: SELECT “<em>column name</em>“ <strong>FROM</strong> “<em>table name</em>“;<ul>
+<li><p><strong>SELECT</strong>: SELECT “<em>column name</em>“ <strong>FROM</strong> “<em>table name</em>“;</p>
+<ul>
 <li>SELECT * FROM “<em>table name</em>“; 提醒：select *最好少写，能不写就不写；因为在开发环境下很多时候并不需要查询表中所有字段，如果用select *会影响性能。</li>
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ <strong>LIMIT</strong> “<em>index</em>“,”<em>length</em>“;(从第index行开始，共显示length行；索引从0开始)</li>
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ <strong>ORDER BY</strong> “<em>column name</em>“;对结果排序，默认升序</li>
@@ -196,51 +199,15 @@
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column name</em>“ LIMIT 1; (查询一列的最大值，与max()函数异曲同工)</li>
 </ul>
 </li>
-<li><strong>WHERE</strong>: SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE + 判断条件;<ul>
+<li><p><strong>WHERE</strong>: SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE + 判断条件;</p>
+<ul>
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>BETWEEN</strong> “<em>min</em>“ <strong>AND</strong> “<em>max</em>“;查询一列的结果在min到max之间的值（闭区间）</li>
 <li>SELECT “<em>column1 name</em>“,”<em>column2 name</em>“ FROM “<em>table name</em>“ WHERE + 判断条件1 <strong>AND</strong> + 判断条件2; AND也可做为逻辑与；追加在WHERE后继续对结果进一步筛选</li>
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>NOT IN</strong> (value1,value2…); NOT 为逻辑非；IN(值1，值2…)在这里的IN相当于逻辑或；</li>
 <li>SELECT “<em>column name</em>“ FROM “<em>table name</em>“ WHERE “<em>column name</em>“ <strong>LIKE</strong> ‘_value%’;(‘_‘ 意为匹配任意一个字符; ‘%’ 意为匹配任意多个字符，任意次)</li>
 </ul>
 </li>
-<li><strong>AS</strong>: SELECT “<em>column1 name</em>“,”<em>column2 name</em>“,”<em>column1 name</em>“*“<em>column2 name</em>“ AS “<em>alias</em>“ FROM “<em>table name</em>“ WHERE + 判断条件； 作用：为查询的字段起别名</li>
-</ul>
-<h3 id="常用的文本处理函数"><a href="#常用的文本处理函数" class="headerlink" title="常用的文本处理函数"></a>常用的文本处理函数</h3><ul>
-<li><p><strong>CONCAT(str1,str2,str3…)</strong>:SELECT CONCAT(TRIM(“<em>column1 name</em>“),TRIM(“<em>column2 name</em>“)) AS “<em>alias</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“; 作用：拼接字段</p>
-</li>
-<li><p><strong>LEFT(str,length)</strong>:作用：从左边第一个字符起截取指定长度的字符。例：SELECT LEFT(‘Java program’,4); 结果：Java</p>
-</li>
-<li><p><strong>RIGHT(str,length)</strong>:作用：从右边第一个字符起截取指定长度的字符。例：SELECT RIGHT(‘Java program’,7); 结果：program</p>
-</li>
-<li><p><strong>LENGTH(str)</strong>:作用：返回字符串的长度。例：SELECT LENGTH(‘Java program’); 结果：12 </p>
-</li>
-<li><p><strong>LOCATE(substr,str)</strong>:作用：substr第一次出现在str中的位置（索引从1开始）。例：SELECT LOCATE(‘a’,’Java program’); 结果：2;</p>
-<ul>
-<li><strong>LOCATE(substr,str,index)</strong>:作用：substr第一次出现在str中的位置，从第index个字符开始算起。例：SELECT LOCATE(‘a’,’Java program’,5); 结果：11</li>
-</ul>
-</li>
-<li><p><strong>LOWER(str)</strong>:SELECT LOWER(‘JAVA PROGRAM’); 结果：java program</p>
-</li>
-<li><p><strong>UPPER(str)</strong>:SELECT UPPER(‘Java program’); 结果：JAVA PROGRAM</p>
-</li>
-<li><p><strong>TRIM(BOTH/LEADING/TRAILING substr FROM str)</strong>:作用：去除str中的substr，并把去除后的字符串返回。</p>
-<ul>
-<li>三个修饰符的作用：<ul>
-<li><strong>LEADING</strong>：从左边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(LEADING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：javamuumuu</li>
-<li><strong>TRAILING</strong>：从右边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(TRAILING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：muumuujava</li>
-<li><strong>BOTH</strong>：去除str两侧的substr；例：SELECT TRIM(BOTH ‘muu’ FROM ‘muujavamuujavamuu’); 结果：javamuujava</li>
-<li>三个修饰符以及substr都可省略，如果都省略则默认去除两侧的空格；例：SELECT TRIM(‘  java  ‘); 结果：java（前后都不带空格）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>SUBSTRING(str,index,length)</strong>: 作用：从str的左边起第index个字符开始，截取length个字符。例：SELECT SUBSTRING(‘Java program’,1,4); 结果：Java</p>
-<ul>
-<li>SELECT SUBSTRING(‘Java program’,1); 省略长度则默认截取后面的全部；结果：Java program</li>
-<li>SELECT SUBSTRING(‘Java program’,2); 结果：ava Program</li>
-<li>SELECT SUBSTRING(‘Java program’,-3);  index如果是负数，则意为从str的右边的第index个字符起，截取length个字符。结果：ram</li>
-<li>SELECT SUBSTRING(‘Java program’,-3,2); 结果：ra</li>
-</ul>
+<li><p><strong>AS</strong>: SELECT “<em>column1 name</em>“,”<em>column2 name</em>“,”<em>column1 name</em>“*“<em>column2 name</em>“ AS “<em>alias</em>“ FROM “<em>table name</em>“ WHERE + 判断条件； 作用：为查询的字段起别名</p>
 </li>
 <li><p><strong>GROUP BY</strong>: 对GRPOP BY进行分组，然后再在各个组内做相同的操作；例：SELECT vendor_id,COUNT(*) FROM products GROUP BY vendor_id; 结果：对vendor_id进行分组，然后计算每个厂商的产品数；结果显示两列，一列是vendor_id,一列COUNT(*),即对应的产品数</p>
 <ul>
@@ -326,6 +293,44 @@
 <td>仅当需要限制检索的行数时必须</td>
 </tr>
 </tbody></table>
+<h3 id="常用的文本处理函数"><a href="#常用的文本处理函数" class="headerlink" title="常用的文本处理函数"></a>常用的文本处理函数</h3><ul>
+<li><p><strong>CONCAT(str1,str2,str3…)</strong>:SELECT CONCAT(TRIM(“<em>column1 name</em>“),TRIM(“<em>column2 name</em>“)) AS “<em>alias</em>“ FROM “<em>table name</em>“ ORDER BY “<em>column1 name</em>“; 作用：拼接字段</p>
+</li>
+<li><p><strong>LEFT(str,length)</strong>:作用：从左边第一个字符起截取指定长度的字符。例：SELECT LEFT(‘Java program’,4); 结果：Java</p>
+</li>
+<li><p><strong>RIGHT(str,length)</strong>:作用：从右边第一个字符起截取指定长度的字符。例：SELECT RIGHT(‘Java program’,7); 结果：program</p>
+</li>
+<li><p><strong>LENGTH(str)</strong>:作用：返回字符串的长度。例：SELECT LENGTH(‘Java program’); 结果：12 </p>
+</li>
+<li><p><strong>LOCATE(substr,str)</strong>:作用：substr第一次出现在str中的位置（索引从1开始）。例：SELECT LOCATE(‘a’,’Java program’); 结果：2;</p>
+<ul>
+<li><strong>LOCATE(substr,str,index)</strong>:作用：substr第一次出现在str中的位置，从第index个字符开始算起。例：SELECT LOCATE(‘a’,’Java program’,5); 结果：11</li>
+</ul>
+</li>
+<li><p><strong>LOWER(str)</strong>:SELECT LOWER(‘JAVA PROGRAM’); 结果：java program</p>
+</li>
+<li><p><strong>UPPER(str)</strong>:SELECT UPPER(‘Java program’); 结果：JAVA PROGRAM</p>
+</li>
+<li><p><strong>TRIM(BOTH/LEADING/TRAILING substr FROM str)</strong>:作用：去除str中的substr，并把去除后的字符串返回。</p>
+<ul>
+<li>三个修饰符的作用：<ul>
+<li><strong>LEADING</strong>：从左边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(LEADING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：javamuumuu</li>
+<li><strong>TRAILING</strong>：从右边第一个字符起直到str中第一次匹配不到substr为止；例：SELECT TRIM(TRAILING ‘muu’ FROM ‘muumuujavamuumuu’); 结果：muumuujava</li>
+<li><strong>BOTH</strong>：去除str两侧的substr；例：SELECT TRIM(BOTH ‘muu’ FROM ‘muujavamuujavamuu’); 结果：javamuujava</li>
+<li>三个修饰符以及substr都可省略，如果都省略则默认去除两侧的空格；例：SELECT TRIM(‘  java  ‘); 结果：java（前后都不带空格）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>SUBSTRING(str,index,length)</strong>: 作用：从str的左边起第index个字符开始，截取length个字符。例：SELECT SUBSTRING(‘Java program’,1,4); 结果：Java</p>
+<ul>
+<li>SELECT SUBSTRING(‘Java program’,1); 省略长度则默认截取后面的全部；结果：Java program</li>
+<li>SELECT SUBSTRING(‘Java program’,2); 结果：ava Program</li>
+<li>SELECT SUBSTRING(‘Java program’,-3);  index如果是负数，则意为从str的右边的第index个字符起，截取length个字符。结果：ram</li>
+<li>SELECT SUBSTRING(‘Java program’,-3,2); 结果：ra</li>
+</ul>
+</li>
+</ul>
 <h3 id="常用的日期函数"><a href="#常用的日期函数" class="headerlink" title="常用的日期函数"></a>常用的日期函数</h3><ul>
 <li><strong>CURDATE()</strong>: 显示当前日期；格式：YYYY-MM-DD；SELECT CURDATE(); </li>
 <li><strong>CURTIME()</strong>: 显示当前时间；格式：HH:MM:SS；SELECT CURTIME(); </li>
@@ -364,7 +369,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="子查询（如果可以用联表查询最好不用子查询）"><a href="#子查询（如果可以用联表查询最好不用子查询）" class="headerlink" title="子查询（如果可以用联表查询最好不用子查询）"></a>子查询（如果可以用联表查询最好不用子查询）</h3><p>直接看例子：套娃查询，最内层的查询语句返回的结果给上一层当作判断条件。（子查询一般不宜嵌套过多，否则极易影响性能）</p>
+<h3 id="子查询（如果可以用连接查询最好不用子查询）"><a href="#子查询（如果可以用连接查询最好不用子查询）" class="headerlink" title="子查询（如果可以用连接查询最好不用子查询）"></a>子查询（如果可以用连接查询最好不用子查询）</h3><p>直接看例子：套娃查询，最内层的查询语句返回的结果给上一层当作判断条件。（子查询一般不宜嵌套过多，否则极易影响性能）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name,cust_contact</span><br><span class="line">FROM customers</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT order_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id &#x3D; &#39;TNT&#39;));</span><br></pre></td></tr></table></figure>
 
 
@@ -372,6 +377,60 @@
 <p>例2：作为计算字段使用子查询: 查询出来的数值可以被上一层继续查询并返回。（涉及外部查询的子查询称为<strong>相关子查询</strong>，列名可能重复的情况下必须这样写，表名和列名之间加个句点）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name,</span><br><span class="line">       cust_state,</span><br><span class="line">       (SELECT COUNT(*)</span><br><span class="line">        FROM orders</span><br><span class="line">        WHERE orders.cust_id &#x3D; customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
 
+
+
+<h3 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a>连接查询</h3><p><strong>注意：1、一定要在WHERE或ON后面写有效的连接条件，否则结果就是笛卡尔积；</strong></p>
+<p>   <strong>2、多表连接且使用多种连接类型时最好先测试每一种连接，可以为后续排除故障节省很多时间</strong></p>
+<p><strong>问：如何选择用哪种连接查询？</strong></p>
+<p><strong>答：如果不希望结果中有null值就用内连接，反之用外连接；外连接中用哪种取决于具体需求。</strong></p>
+<ul>
+<li><p>内连接: 连接的表的查询列互相匹配，匹配不上的就不会返回到结果里。</p>
+<ul>
+<li><p>隐式内连接: 涉及多表连接查询时若不指定连接类型，则默认为内连接。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name,prod_name,prod_price</span><br><span class="line">FROM vendors,products</span><br><span class="line">WHERE vendors.vend_id &#x3D; products.vend_id</span><br><span class="line">ORDER BY vend_name,prod_price;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>显式内连接（推荐）: 在FROM后面显式地写出<strong>INNER OUTER JOIN</strong>。OUTER可省略，显式内连接的连接条件要写在ON后面，不能用WHERE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name,prod_name,prod_price</span><br><span class="line">FROM vendors INNER JOIN products</span><br><span class="line">ON vendors.vend_id &#x3D; products.vend_id</span><br><span class="line">ORDER BY vend_name,prod_price;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自连接: 例: 查询员工及其对应的领导的id和name。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT e.employee_id,e.last_name,m.employee_id managerId,m.last_name managerName</span><br><span class="line">FROM employees e,employees m</span><br><span class="line">WHERE e.manager_id &#x3D; m.employee_id;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>外连接</p>
+<ul>
+<li>左外连接: 关键字<strong>LEFT OUTER JOIN</strong>, 把左边表的查询列中每一行都拿出来跟右边的表匹配，返回值中左边表的每一个查询列都会显示出来，匹配不上的会返回NULL到结果中显示。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT customers.cust_id,orders.order_num</span><br><span class="line">FROM customers LEFT JOIN orders</span><br><span class="line">ON customers.cust_id &#x3D; orders.cust_id;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>右外连接: 关键字<strong>RIGHT OUTER JOIN</strong>, 把右边表的查询列中每一行都拿出来跟左边的表匹配，返回值中右边表的每一个查询列都会显示出来，匹配不上的会返回NULL到结果中显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT customers.cust_id,orders.order_num</span><br><span class="line">FROM customers RIGHT JOIN orders</span><br><span class="line">ON customers.cust_id &#x3D; orders.cust_id;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>全外连接: 关键字<strong>FULL OUTER JOIN</strong> ，MySQL不支持，Oracle支持</p>
+</li>
+</ul>
+<h3 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h3><p>关键字：<strong>UNION</strong></p>
+<p>作用：几乎等价于WHERE子句加OR子句。</p>
+<p>特点：对结果自动去重；多个查询 语句返回的结果中如有重复的行会被自动去重，当然也可以改变这一默认行为，方式为使用<strong>UNION ALL</strong>关键字。</p>
+<p>规则：</p>
+<ol>
+<li>至少有两条SELECT语句，每两个SELECT语句中间用UNION分隔</li>
+<li>每个查询必须包含相同的列、表达式或聚集函数（顺序不必相同）</li>
+<li>列数据类型必须兼容：不必完全相同，但必须是数据库软件（如MySQL、Oracle等）可以隐式地转换地类型（比如不同的数值类型或不同的日期类型）</li>
+<li>需要对结果排序时只能把ORDER BY写在最后一个查询语句后面，不支持多个ORDER BY子句；</li>
+</ol>
+<p>例：查询价格不超过5的产品相关信息和厂商id为1001或1002的产品相关信息，且把结果显示到一张表中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;&#x3D; 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id In (1001,1002)</span><br><span class="line">ORDER BY vend_id,prod_price;</span><br></pre></td></tr></table></figure>
+
+<p>等价于下面的WHERE自句的效果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;&#x3D; 5</span><br><span class="line">OR vend_id IN (1001,1002);</span><br><span class="line">ORDER BY vend_id,prod_price;</span><br></pre></td></tr></table></figure>
+
+<p>结论：UNION擅长的领域为联合多个表查询且结果需要显示到一张表上。</p>
 
       
 
@@ -1114,15 +1173,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
               </li>
             
             <div class="clearfix"></div>
