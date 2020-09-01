@@ -367,7 +367,7 @@
 <li><strong>FLOOR()</strong>: 向下取整。返回小于等于参数的最大整数。例1：SELECT FLOOR(-9.99); 结果：-10；例2：SELECT FLOOR(9.99); 结果：9</li>
 <li><strong>TRUNCATE(num1,num2)</strong>: 对num1截断，只保留num2位小数。例：SELECT TRUNCATE(1.899,1); 结果：1.8</li>
 </ul>
-<h3 id="常用的聚集函数"><a href="#常用的聚集函数" class="headerlink" title="常用的聚集函数"></a>常用的聚集函数</h3><ul>
+<h3 id="常用的聚集函数（又称聚合函数、组合函数等等）"><a href="#常用的聚集函数（又称聚合函数、组合函数等等）" class="headerlink" title="常用的聚集函数（又称聚合函数、组合函数等等）"></a>常用的聚集函数（又称聚合函数、组合函数等等）</h3><ul>
 <li><strong>AVG</strong>(<em>column</em>): 返回一个数值列的平均值，自动忽略null值；<ul>
 <li><strong>AVG</strong>(<strong>DISTINCT</strong> <em>column</em>): 去重之后求一列的平均值</li>
 </ul>
@@ -521,6 +521,116 @@
 </li>
 </ul>
 </li>
+</ul>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><ul>
+<li><p>含义：虚拟表，和普通表一样使用。</p>
+</li>
+<li><p>应用场景：1、多个地方用到同样的查询结果；2、查询结果使用的sql语句较复杂</p>
+</li>
+<li><p>优点：1、重用sql语句；2、简化sql操作，不必知道查询细节；3、通过视图可以只开放一个表的特定部分的访问权限而不是整个表，从而保护数据，提高安全性</p>
+</li>
+<li><p>视图的特殊规则：</p>
+<ul>
+<li>1、ORDER BY可以在创建视图时使用，但当使用视图也用到了ORDER BY时，那么视图中的ORDER BY就会失效；</li>
+<li>2、WHERE可以在创建视图时使用，当使用视图也用到WHERE时，两个WHERE子句会被自动合并；</li>
+<li>3、如果在定义/创建视图时有以下情况，则不能更新视图（指更新数据，而不是更改视图定义或结构）：<ul>
+<li>1). 使用聚集函数或 DISTINCT、GROUP BY、HAVING、UNION、UNION ALL等关键字</li>
+<li>2). 使用连接查询</li>
+<li>3). 使用子查询</li>
+<li>4). FROM一个不可更新的视图</li>
+<li>5). 常量视图（不从某几个基本表中获取数据，仅仅引用常量值），例：<code>CREATE OR REPLACE VIEW view1 AS SELECT &#39;常量&#39;;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>创建视图</strong>: CREATE VIEW 视图名 AS 查询语句; 例：创建一个名为prodcust的视图，连接3个表，返回已订购了任意产品的所有客户列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW prodcust AS</span><br><span class="line">SELECT cust_name,cust_contact,prod_id</span><br><span class="line">FROM customers</span><br><span class="line">INNER JOIN orders</span><br><span class="line">ON customers.cust_id &#x3D; orders.cust_id</span><br><span class="line">INNER JOIN orderitems</span><br><span class="line">ON customers.order_num &#x3D; orderitems.order_num;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>使用视图</strong>: </p>
+<ul>
+<li><p>SELECT 列名 FROM 视图名 WHERE 判断条件; 例：查询订购了TNT产品的客户及其联系人。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name,cust_contact</span><br><span class="line">FROM prodcust</span><br><span class="line">WHERE prod_id &#x3D; &#39;TNT&#39;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>视图可以嵌套使用，例：在prodcust视图的基础上加上客户的国别，并创建成一个新的视图。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW prodcustwithcountry AS</span><br><span class="line">SELECT CONCAT(TRIM(prodcust.cust_name),&#39; (&#39;,TRIM(customers.cust_country),&#39;)&#39;),</span><br><span class="line">        prodcust.cust_contact,</span><br><span class="line">        prodcust.prod_id</span><br><span class="line">FROM prodcust</span><br><span class="line">INNER JOIN customers</span><br><span class="line">ON prodcust.cust_name &#x3D; customers.cust_name;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>修改视图</strong>: 指修改视图的结构/定义</p>
+<ul>
+<li><p>方式一：CREATE OR REPLACE VIEW 视图名 AS 查询语句; 例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE OR REPLACE VIEW view1 AS</span><br><span class="line">SELECT * FROM customers;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方式二：ALTER VIEW 视图名 AS 查询语句; 两种方式效果相同。例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER VIEW view2 AS</span><br><span class="line">SELECT * FROM customers;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>删除视图</strong>: DROP VIEW 视图1,视图2,视图3…; 例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP VIEW prodcust,view1,view2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>检视视图</strong>: SHOW CREATE VIEW 视图名; 查看创建该视图时的信息，比如创建者、字符集等等</p>
+</li>
+</ul>
+<h3 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h3><ul>
+<li><p>含义：一组预先编译好的SQL语句的集合，可以理解成批处理语句，但远不止于此。存储过程在定义和使用时类似于JAVA中的方法。</p>
+</li>
+<li><p>优点： 1. 简化sql操作， 2. 提高代码的重用性， 3. 安全， 4. 与一条一条地执行sql语句相比存储过程减少了编译次数并且减少了和数据库服务器的连接次数从而使得性能更高</p>
+</li>
+<li><p><strong>创建存储过程</strong>: CREATE PROCEDURE 存储过程名(参数列表) BEGIN 存储过程体(一组合法的sql语句) END;   需要注意的是：在MySQL命令行中创建存储过程时，需要把默认分隔符改成除了;和\之外的任意一个字符；更改分隔符的关键字：<strong>DELIMITER</strong>; 例： DELIMITER $ </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line">CREATE PROCEDURE ordertotal(</span><br><span class="line">    IN onumber INT,</span><br><span class="line">    OUT ototal DECIMAL(8,2)</span><br><span class="line">)</span><br><span class="line">BEGIN</span><br><span class="line">    SELECT SUM(item_price*quantity) INTO ototal</span><br><span class="line">    FROM orderitems</span><br><span class="line">    WHERE order_num &#x3D; onumber;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数列表：参数列表包含三部分：参数模式，参数名，参数类型。参数列表可以为空，但是存储过程名后的一对圆括号不可省略。参数模式有三种：IN、OUT、INOUT<ul>
+<li>IN：作为存储过程的输入参数，调用存储过程时必须传入；</li>
+<li>OUT：作为存储过程的输出参数，用于调用存储过程后接收查询到的结果；</li>
+<li>INOUT：既可作为输入又可作为输出，既需要传入，又需要接收返回值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line">CREATE PROCEDURE example(</span><br><span class="line">IN param1 DECIMAL(8,2),</span><br><span class="line">OUT param2 INT,</span><br><span class="line">INOUT param3 DOUBLE</span><br><span class="line">)</span><br><span class="line">BEGIN</span><br><span class="line">SELECT column1 FROM table1 WHERE column2&#x3D;param1;</span><br><span class="line">SELECT MAX(column3),param3+MAX(column3) INTO param2,param3 FROM table2;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>调用存储过程</strong>: CALL 存储过程名(实参列表); 这里的参数根据创建时的参数列表填写，有几个就写几个。例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SET @a&#x3D;1;</span><br><span class="line">CALL example(10,@total,@a);</span><br><span class="line">select @total,@a;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>删除存储过程</strong>: DROP PROCEDURE 存储过程名; 例：<code>DROP PROCEDURE example;</code></p>
+</li>
+<li><p><strong>检视存储过程</strong>: </p>
+<ul>
+<li>SHOW CREATE PROCEDURE 存储过程名; 查看该存储过程的创建信息，如创建者、创建时间、字符集等。</li>
+<li>SHOW PROCEDURE STATUS; 查看所有存储过程及其创建信息；可以加一个LIKE关键字加以筛选，例：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW PROCEDURE STATUS LIKE &#39;example&#39;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
+<li>含义：一组预先编译好的sql语句的集合。</li>
+<li>与存储过程的区别：与存储过程相似，但又有所不同：<ul>
+<li>存储过程可以有0个或多个返回值</li>
+<li>函数有且仅有1个返回值，适用于只返回且必须返回1个返回值的场景。</li>
+</ul>
+</li>
+<li><strong>创建函数</strong>: CREATE FUNCTION 函数名(参数列表) RETURNS 返回值类型 BEGIN 函数体 END; 例：<ul>
+<li>参数由两部分组成：参数名 参数类型。可省略参数，变成无参函数。</li>
+<li>最好把return语句写在函数体的最后。例：创建一个函数，传入员工姓名，返回该员工的工资。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line">CREATE FUNCTION myFunction(empName VARCHAR(20)) RETURNS DOUBLE</span><br><span class="line">BEGIN</span><br><span class="line">    SET @sal &#x3D; 0; #定义用户变量</span><br><span class="line">    SELECT salary INTO @sal #赋值</span><br><span class="line">    FROM employees</span><br><span class="line">    WHERE emp_name &#x3D; empName;</span><br><span class="line">    RETURN @sal;</span><br><span class="line">END$</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><strong>调用函数</strong>: SELECT 函数名(参数列表); 例：<code>SELECT myFunction(&#39;admin&#39;);</code></li>
+<li><strong>检视函数</strong>: <ul>
+<li>SHOW CREATE FUNCTION 函数名; 查看函数的创建信息</li>
+<li>SHOW FUNCTION STATUS; 查看机器上的所有函数的创建信息。可以用LIKE关键字做筛选，例：<code>SHOW FUNCTION STATUS LIKE &#39;myFunction&#39;;</code></li>
+</ul>
+</li>
+<li><strong>删除函数</strong>: DROP FUNCTINO 函数名;</li>
 </ul>
 
       
@@ -765,11 +875,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
         		</li>
       		
 		</ul>
@@ -851,11 +961,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		
 		</ul>
@@ -1256,7 +1366,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">idea</a>
+                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1264,7 +1374,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
+                <a href="javascript:void(0)" class="js-tag color5">idea</a>
               </li>
              
               <li class="article-tag-list-item">
