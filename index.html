@@ -632,6 +632,216 @@
 </li>
 <li><strong>删除函数</strong>: DROP FUNCTINO 函数名;</li>
 </ul>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li><p><strong>系统变量</strong>: 变量由系统提供，不是用户自定义，属于服务器层面</p>
+<ul>
+<li><p><strong>全局变量</strong>: MySQL服务器每次重启都会把全局变量恢复到默认值。查看全局级别变量需要加GLOBAL，否则默认是会话变量。</p>
+<ul>
+<li>查看所有的系统变量：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW GLOBAL VARIABLES;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看满足条件的部分系统变量； 例：查看变量名包含‘char’的变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW GLOBAL VARIABLES LIKE &#39;%char%&#39;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看指定的某个系统变量的值： SELECT @@global.变量名;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@global.tx_isolation;#事务的隔离级别</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>例：为某个指定的全局变量赋值：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#第一种方式：</span><br><span class="line">SET @@global.autocommit&#x3D;0;#取消事务的自动提交</span><br><span class="line">#第二种方式：</span><br><span class="line">SET GLOBAL autocommit&#x3D;1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>会话变量</strong>: 当客户端与MySQL服务器建立一个连接/会话时，服务器复制大部分的全局变量给当前连接，这些变量被称为会话变量。会话变量只在当前连接/会话中有效，断开连接后会话变量随之消失。</p>
+<ul>
+<li>查看所有的会话变量，SESSION可省略：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SHOW SESSION VARIABLES;</span><br><span class="line">SHOW VARIABLES;#SESSION可省略</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看满足条件的部分会话变量； 例：查看变量名包含‘char’的变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SHOW SESSION VARIABLES LIKE &#39;%char%&#39;;</span><br><span class="line">SHOW VARIABLES LIKE &#39;%char%&#39;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看指定的某个系统变量的值： SELECT @@session.变量名 或 SELECT @@变量名;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@session.tx_isolation;#事务的隔离级别</span><br><span class="line">SELECT @@local.tx_isolation;</span><br><span class="line">SELECT @@tx_isolation;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>例：为某个指定的全局变量赋值：以下几种方法作用一样，任选其一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SET @@session.autocommit&#x3D;0;#取消事务的自动提交</span><br><span class="line">SET SESSION autocommit&#x3D;1;</span><br><span class="line">SET LOCAL autocommit&#x3D;1;</span><br><span class="line">SET @@local.autocommit&#x3D;1;</span><br><span class="line">SET @@autocommit&#x3D;1;</span><br><span class="line">SET autocommit&#x3D;1;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>注意：</strong></p>
+<ul>
+<li>1、在查看系统变量时如果用<code>SELECT@@变量名</code>，则默认查看的是会话变量，如果会话变量里没有就会查看全局变量；比如只存在于全局变量中的变量@@max_connections；</li>
+<li>2、如果用<code>SET@@变量名</code> 进行赋值时默认赋值给会话变量，如果会话变量里没有就会报错。比如只存在于全局变量中的变量@@max_connections。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>自定义变量</strong>: 顾名思义，用户自定义的变量。需要先声明再赋值才能使用变量</p>
+<ul>
+<li><p><strong>用户变量</strong>: 仅在当前会话有效</p>
+<ul>
+<li>声明并初始化：SET @变量名=值; 或：SELECT @变量名;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET @count &#x3D; 0;</span><br><span class="line">SELECT @count;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>赋值：SET @变量名=值; 或：SELECT @变量名:=值; 或SELCT INTO</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SET @count &#x3D; 1;</span><br><span class="line">SELECT @count :&#x3D; 1;#略繁琐，不常用</span><br><span class="line">SELECT COUNT(*) INTO @count FROM table1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>局部变量</strong>: 仅在定义它的BEGIN END代码块中有效，通常是定义在存储过程或函数中用来交换数据。</p>
+<ul>
+<li>声明：DECLARE 变量名 类型; 或 DECLARE 变量名 类型 DEFAULT 值;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DECLARE variable INT(5) DEFAULT 0; #后续如果未对变量赋值则一直保持默认值0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>赋值：SET 变量名=值; 或 SELECT 变量名:=值; 或 SELECT INTO</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DECLARE a INT(5);</span><br><span class="line">DECLARE b INT(5);</span><br><span class="line">DECLARE c INT(5);</span><br><span class="line">SET a&#x3D;0;</span><br><span class="line">SET b:&#x3D;0;</span><br><span class="line">SELECT column1 INTO c FROM table1 WHERE column2&#x3D;0;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>注意：</strong>用户变量必须加@符号，不用指定类型；但局部变量必须指定类型，且一般不用加@符号</p>
+</li>
+</ul>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>指MySQL中的数据类型。</p>
+<p>**常见的数据类型: **</p>
+<ul>
+<li><p><strong>数值型</strong>: </p>
+<ul>
+<li><p><strong>整型</strong>: </p>
+<table>
+<thead>
+<tr>
+<th align="left">类型(有符号数)</th>
+<th align="left">tinyint</th>
+<th align="left">smallint</th>
+<th align="left">mediumint</th>
+<th align="left">int</th>
+<th align="left">bigint</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">字节数</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">3</td>
+<td align="left">4</td>
+<td align="left">8</td>
+</tr>
+<tr>
+<td align="left">取值范围</td>
+<td align="left">[-128,127]</td>
+<td align="left">[-32768,32767]</td>
+<td align="left">[-2^23,2^23-1]</td>
+<td align="left">[-2^31,2^31-1]</td>
+<td align="left">[-2^63,2^63-1]</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>注意：</p>
+<ul>
+<li><p>1、如果不设置有符号还是无符号数，则默认有符号数。如果加关键字UNSIGNED则变为无符号数，无符号数的最大值是有符号数时的最大值的二倍加一；</p>
+</li>
+<li><p>2、如果插入的数值超出了整型的范围，会报一个out of range异常，并且插入临界值；</p>
+</li>
+<li><p>3、创建列时如果不设置长度，会有默认的长度，该长度代表了显示的最大宽度；</p>
+</li>
+<li><p>4、创建列时自定义的长度跟该列能存放的数值大小无关，自定义的列可以用UNSIGNED ZEROFILL修饰，作用是插入的数值长度不足自定义的列长时用0从左边填充，缺几位补几个零，zerofill默认该列数据只能是无符号数。</p>
+</li>
+<li><p><strong>小数</strong>: m表示有效数字总个数，d表示小数位数；m和d都可省略。如果超过范围，则插入临界值。</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>字节</th>
+<th>精度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DECIMAL(m,d)</td>
+<td>m+2(符号位和小数点各占一个字节)</td>
+<td>定点数，无精度问题</td>
+</tr>
+<tr>
+<td>FLOAT(m,d)</td>
+<td>4</td>
+<td>单精度浮点数</td>
+</tr>
+<tr>
+<td>DOUBLE(m,d)</td>
+<td>8</td>
+<td>双精度浮点数</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>* **定点数**:DECIMAL(m,d): 默认m等于10，d等于0；以字符串形式存储数值，所以没有精度问题，一个数字占一个字节，符号位和小数点各占一个字节，总占用字节数为m+2；适用于对精度敏感的数据，比如货币等。
+* **浮点数**: 表数范围比定点数大，但是存在精度问题；所以尽量避免浮点数之间作比较。
+  * FLOAT(m,d): 单精度浮点型，8位精度，4字节；如果省略m和d，则在第七位有效数字处开始四舍五入，即只有6位有效数字。
+  * DOUBLE(m,d): 双精度浮点型，16为精度，8字节；如果省略m和d，则在第十七位有效数字处开始四舍五入，即有16位有效数字。</code></pre>
+<ul>
+<li><p><strong>字符型</strong>: </p>
+<ul>
+<li><p><strong>短文本</strong>: </p>
+<ul>
+<li><p>char：大小0-255字节，定长字符串，写法：char(m),m为最大字符数，省略默认为1；效率高，但空间耗费大</p>
+</li>
+<li><p>varchar大小0-65535字节，变长字符串，写法：varchar(m),m为最大字符数，不可省略；空见耗费小但效率低</p>
+</li>
+<li><p>binary/varbinary：binary和varbinary用于保存二进制的字符串，不是字符型字符串；binary(n)中的n指的是n个字节，而不是n个字符；binary/varbinary类型进行数值比较时按照二进制值来比较，如：Binary(‘a’)不等于Binary(‘a ‘); </p>
+</li>
+<li><p>enum：用于保存枚举类型，预定义的值最好不要包含数字,否则容易与下标混淆!!!!设定某个字段类型为enum后该字段只接收枚举类型预定义的几个值，如果插入别的值会警告并插入空值，如果该字段指定了NOT NULL则报错；例：gender ENUM(‘male’,’female’,’secret’) NOT NULL;如果插入性别字段的值是预定义之外的值比如’man’则报错，因为该列非空，但插入的值又不是枚举类型的预定义的值。</p>
+</li>
+<li><p>set：用于保存集合；插入的值可以是一个或多个预定义的值；例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE example(tags SET(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;));</span><br><span class="line">#以下几个值都可以插入到tags字段中</span><br><span class="line">INSERT INTO tab_set VALUES(&#39;a&#39;);</span><br><span class="line">INSERT INTO tab_set VALUES(&#39;A,B&#39;);</span><br><span class="line">INSERT INTO tab_set VALUES(&#39;a,b,c&#39;);</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>长文本</strong>: </p>
+<ul>
+<li>text：保存文本数据，大小写敏感，最大65535个字节</li>
+<li>blob：保存二进制数据，只能整体读出来，最大65535字节</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>日期型</strong>: </p>
+<ul>
+<li>date：4字节，只保存日期，范围：1000-01-01到9999-12-31</li>
+<li>time：3字节，只保存时间，</li>
+<li>year：1字节，保存年，范围：1901-2155</li>
+<li>datetime：保存日期加时间，8字节，范围：1000-9999，已存在的日期时间不因时区改变而改变</li>
+<li>timestamp：保存日期加时间，4字节，范围：1970-2038，已存在的日期时间随着时区改变而改变</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><font size=5>如何选择数据类型？？？</font>采用从小原则，能用tinyint最好不用int，能用float最好不用double。这样MySQL运行效率会更高点。</li>
+</ul>
 
       
 
@@ -875,11 +1085,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">idea</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		
 		</ul>
@@ -961,11 +1171,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">入门</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring Boot</a>
         		</li>
       		
 		</ul>
@@ -1366,7 +1576,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
+                <a href="javascript:void(0)" class="js-tag color5">idea</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1374,7 +1584,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">idea</a>
+                <a href="javascript:void(0)" class="js-tag color2">Spring Boot</a>
               </li>
              
               <li class="article-tag-list-item">
